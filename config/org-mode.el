@@ -1,0 +1,51 @@
+(use-package ob-racket
+  :after org
+  :pin manual
+  :config
+  (append '((racket . t) (scribble . t)) org-babel-load-languages))
+
+(use-package org
+  :hook ((org-mode . visual-line-mode))
+  :config (progn
+			(define-key org-mode-map (kbd "s-i") (kbd "C-c C-, s"))
+			(org-babel-do-load-languages
+			 'org-babel-load-languages
+			 '((python . t)
+			   (js . t)
+			   (dot . t)
+			   (racket . t)))
+			(setq
+         ;; Hide leading stars on headers.
+         ;; org-hide-leading-stars t
+         ;; Change org-babel lisp-eval to sly-eval (default is slime).
+         ;; org-babel-lisp-eval-fn #'sly-eval
+         ;; Skip confirmation when evaluating org-babel code blocks.
+         org-confirm-babel-evaluate (lambda (lang body) nil)
+         ;; Stop Org from adding 2 extra spaces of indentation inside src blocks
+         org-edit-src-content-indentation 0
+         ;; Prevent Org from stripping or altering your code's leading spaces
+         ;; org-src-preserve-indentation nil
+         ;; Make the TAB key use the actual major-mode rules inside the src block
+         ;; org-src-tab-acts-natively t
+         )))
+
+(use-package org-modern
+  :ensure t
+  :demand t
+  :hook (toggle-word-wrap visual-line-mode)
+  :config (progn
+            (setq
+             ;; Edit settings
+             org-auto-align-tags nil
+             org-tags-column 0
+             org-catch-invisible-edits 'show-and-error
+             org-special-ctrl-a/e t
+             org-insert-heading-respect-content t
+
+             ;; Org styling, hide markup etc.
+             org-hide-emphasis-markers t
+             org-pretty-entities t
+             org-agenda-tags-column 0
+             org-ellipsis "…")
+
+        (global-org-modern-mode)))

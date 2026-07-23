@@ -1,0 +1,2 @@
+(ido-mode)
+(ido-everywhere)

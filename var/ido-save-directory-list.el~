@@ -1,0 +1,31 @@
+;;; -*- coding: utf-8 -*-
+
+;; ----- ido-last-directory-list -----
+(
+ ("/home/pyrok/Documents/lisp_racket_learning/" . "sicp-course/")
+ ("/home/pyrok/Documents/" . "lisp_racket_learning/")
+)
+
+;; ----- ido-work-directory-list -----
+(
+ "/home/pyrok/Documents/lisp_racket_learning/sicp-course/"
+)
+
+;; ----- ido-work-file-list -----
+(
+ "lecture-3a.org"
+)
+
+;; ----- ido-dir-file-cache -----
+(
+ ("/home/pyrok/Documents/lisp_racket_learning/sicp-course/" (27230 56743 680738 345000) "lecture-2b.rkt" "lecture-2b.rkt~" "lecture-2a.rkt" "lecture-2a.rkt~" "lecture-1a.rkt" "lecture-1a.rkt~" "../" "./")
+
+ ("/home/pyrok/Documents/lisp_racket_learning/" (27230 62705 644038 622000) "learning-org.tex" "learning-org.md" "learning-org.org" "learning-org.org~" "learning-org.html" "#hola.rkt#" "hola.rkt" "sicp-course/" "exercises.rkt" "functions.rkt" "testing.rkt" "../" "./")
+
+ ("/home/pyrok/Documents/" (27219 59816 944622 901000) "lisp_racket_learning/" "dont_starve_testing.py" "dont_starve.py" "dont_starve_oscar.py" "mastering_python_design_patterns/" "tasks-backend/" "terminal-character-customization.py" "omarchy-theme/" "../" "./")
+
+ ("/home/pyrok/" (27230 48876 792751 335000) ".steampid" ".steampath" "*scratch*" ".emacs.d/" "org/" ".bashrc" "ScreepsArena/" ".klei/" ".sqlite_history" "dotfiles/" ".mozilla/" ".wine/" ".docker/" "Learning/" ".wget-hsts" ".ssh/" "Nitrox/" ".nuget/" ".dotnet/" ".omnissa/" ".vmware/" ".rustup/" ".gnupg/" ".npm/" ".opencode/" "brave-cinhimbnkkaeohfgghhklpknlkffjgod-Default.desktop" ".pulse-cookie" ".zshrc" ".profile" "steam.desktop" ".steam/" ".cargo/" ".gemini/" ".bash_history" ".pki/" ".nv/" "Projects/" "Music/" "Documents/" ".pi/" ".codex/" ".claude/" ".agents/" "Videos/" "Pictures/" "Downloads/" "Work/" ".XCompose" ".config/" ".cache/" ".local/" ".bash_profile" ".bash_logout" "../" "./")
+)
+
+;; ----- ido-unc-hosts-cache -----
+t

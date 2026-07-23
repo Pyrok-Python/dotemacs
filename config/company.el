@@ -1,0 +1,16 @@
+;; Autocompletion while editing code
+(use-package company
+  :ensure t
+  :hook (prog-mode geiser-repl-mode)
+  :config (progn
+        (define-key company-mode-map   (kbd "C-SPC") #'company-complete)
+        (define-key company-active-map (kbd "M-k") #'company-select-previous)
+        (define-key company-active-map (kbd "M-j") #'company-select-next)
+        (define-key company-active-map (kbd "<tab>") #'company-complete-selection)
+        (define-key company-active-map (kbd "<enter>") nil)
+        (define-key company-active-map (kbd "RET") nil)
+        (define-key company-active-map (kbd "C-h") nil)
+        ;; (keymap-unset company-active-map "<enter>" t)
+        ;; (keymap-unset company-active-map "RET" t)
+        ;; (keymap-unset company-active-map "C-h" t)
+        (global-company-mode)))
