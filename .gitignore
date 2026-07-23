@@ -1,0 +1,23 @@
+# Auto-downloaded packages
+elpa/
+url/
+bookmarks
+
+# Temporary, backup, and auto-save files
+*~
+\#*\#
+.#*
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+
+# Cache directories (no-littering output)
+.cache/
+etc/
+var/
+auto-save-list/
+transient/
+straight/
+
+# Custom UI variables
+custom.el
