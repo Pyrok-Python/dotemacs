@@ -370,6 +370,7 @@ disables evaluation confirmation prompts, and sets keybindings for inserting cod
   ;; Babel execution settings
   (org-confirm-babel-evaluate nil)
   (org-edit-src-content-indentation 0)
+  (org-support-shift-select t)
   
   :config
   ;; Load Org Babel languages
