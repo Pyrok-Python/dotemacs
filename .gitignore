@@ -1,15 +1,21 @@
-# Auto-downloaded packages
+# Auto-downloaded packages & ELN byte-code cache
 elpa/
+eln-cache/
 url/
 bookmarks
 
-# Temporary, backup, and auto-save files
+# Auto-generated Lisp from Org Babel
+config.el
+
+# Temporary, backup, session locks, and auto-save files
 *~
 \#*\#
 .#*
+pyrok@*
 /.emacs.desktop
 /.emacs.desktop.lock
 *.elc
+init-old.el
 
 # Cache directories (no-littering output)
 .cache/
