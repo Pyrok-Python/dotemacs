@@ -1,11 +1,14 @@
-# Auto-downloaded packages & ELN byte-code cache
+# Auto-downloaded packages and ELN byte-code compilation cache
 elpa/
 eln-cache/
 url/
 bookmarks
 
-# Auto-generated Lisp from Org Babel
+# Auto-generated Elisp file from Org Babel
 config.el
+
+# Legacy modular configuration folder
+config/
 
 # Temporary, backup, session locks, and auto-save files
 *~
@@ -17,7 +20,7 @@ pyrok@*
 *.elc
 init-old.el
 
-# Cache directories (no-littering output)
+# Internal cache and state directories (no-littering output)
 .cache/
 etc/
 var/
@@ -25,5 +28,5 @@ auto-save-list/
 transient/
 straight/
 
-# Custom UI variables
+# Local custom UI settings
 custom.el
