@@ -21,9 +21,6 @@
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
-;; Uncomment if MELPA Stable is desired:
-;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-
 ;; Default behavior for use-package
 (setq use-package-always-defer t)
 
