@@ -632,7 +632,7 @@ Highlights uncommitted changes (adds, deletes, modifications) in the fringe/gutt
          (org-mode . diff-hl-mode)
          (dired-mode . diff-hl-dired-mode-unless-remote))
   :config
-  ;; Refresh indicators after staging changes with Magit
-  (add-hook 'magit-pre-refresh-hook 'diff-hl-fringe-source-begin)
-  (add-hook 'magit-post-refresh-hook 'diff-hl-fringe-source-end))
+  ;; Refresh indicators cleanly when using Magit
+  (add-hook 'magit-pre-refresh-hook #'diff-hl-magit-pre-refresh)
+  (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh))
 #+end_src
