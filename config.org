@@ -31,17 +31,21 @@
   - [[#org-babel-racket-integration-ob-racket][Org Babel Racket Integration (~ob-racket~)]]
   - [[#modern-ui-styling-org-modern][Modern UI Styling (~org-modern~)]]
   - [[#automatic-table-of-contents-toc-org][Automatic Table of Contents (~toc-org~)]]
+  - [[#smart-source-block-management--auto-repl][Smart Source Block Management & Auto-REPL]]
+  - [[#smart-source-block-editing][Smart Source Block Editing]]
 - [[#custom-keybindings-keybinds][Custom Keybindings (~keybinds~)]]
   - [[#key-translations][Key Translations]]
   - [[#unset-default-shortcuts][Unset Default Shortcuts]]
   - [[#global-shortcuts--window-navigation][Global Shortcuts & Window Navigation]]
+- [[#git-integration][Git Integration]]
+  - [[#git-interface-magit][Git Interface (~magit~)]]
+  - [[#gutter-git-indicators-diff-hl][Gutter Git Indicators (~diff-hl~)]]
 
 * System & Performance
 Core system optimizations, garbage collection tweaks, and runtime file hygiene settings 
 designed to keep Emacs fast, responsive, and uncluttered.
 
 ** Directory Cleanup (~no-littering~)
-
 The ~no-littering~ package automatically redirects temporary and state files 
 created by Emacs and its packages to the ~var/~ and ~etc/~ subdirectories inside =~/.emacs.d/=.
 
@@ -82,11 +86,13 @@ Disable unnecessary UI elements and configure cursor and search scrolling behavi
 #+end_src 
 
 ** Typography & Fonts
-Apply ~Hack Nerd Font~ globally for both standalone frames and ~emacsclient~ instances.
+Apply ~Hack Nerd Font~ globally as the primary monospace font family.
 
 #+begin_src emacs-lisp
-(add-to-list 'default-frame-alist '(font . "Hack Nerd Font-12"))
-(set-face-attribute 'default nil :font "Hack Nerd Font-12")
+(set-face-attribute 'default nil
+                    :font "Hack Nerd Font"
+                    :height 120
+                    :weight 'regular)
 #+end_src
 
 ** Startup Screen & Initial Buffer
@@ -119,7 +125,6 @@ Ensure pressing ~q~ in help buffers completely kills the buffer instead of just 
 #+end_src
 
 ** Suppress Compiler Warnings
-
 Prevents compilation warning buffers from popping up during package installation.
 
 #+begin_src emacs-lisp
@@ -164,15 +169,14 @@ to create a cohesive, readable, and modern interface.
   (prettify-symbols-mode 1))
 
 ;; Pretty symbols hooks.
-(add-hook 'emacs-lisp-mode-hook       #'cl-pretty-symbols)
-(add-hook 'lisp-interaction-mode-hook #'cl-pretty-symbols)
-(add-hook 'lisp-mode-hook             #'cl-pretty-symbols)
-(add-hook 'racket-mode-hook           #'scheme-pretty-symbols)
-(add-hook 'scheme-mode-hook           #'scheme-pretty-symbols)
+;;(add-hook 'emacs-lisp-mode-hook       #'cl-pretty-symbols)
+;;(add-hook 'lisp-interaction-mode-hook #'cl-pretty-symbols)
+;;(add-hook 'lisp-mode-hook             #'cl-pretty-symbols)
+;;(add-hook 'racket-mode-hook           #'scheme-pretty-symbols)
+;;(add-hook 'scheme-mode-hook           #'scheme-pretty-symbols)
 #+end_src
 
 ** Color Themes (~ef-themes~)
-
 Colorful, high-contrast, and legible themes crafted by Protesilaos Stavrou.
 Sets ~ef-bio~ as the default theme with a quick keybinding to rotate through random dark themes.
 
@@ -191,7 +195,6 @@ Sets ~ef-bio~ as the default theme with a quick keybinding to rotate through ran
 #+end_src 
 
 ** Modeline (~doom-modeline~)
-
 A minimalist and modern status line powered by ~all-the-icons~.
 
 #+begin_src emacs-lisp
@@ -202,7 +205,6 @@ A minimalist and modern status line powered by ~all-the-icons~.
 #+end_src 
 
 ** Line Numbers (~display-line-numbers~)
-
 Enables relative or absolute line numbers exclusively in programming buffers (~prog-mode~).
 
 #+begin_src emacs-lisp
@@ -216,7 +218,6 @@ Streamlined tools for directory navigation, file manipulation, and active buffer
 using built-in Emacs utilities like Dired and IBuffer.
 
 ** File Management (~dired~)
-
 Configures the built-in ~dired~ file manager to group directories first,
 hide unnecessary details, colorize file attributes, and show modern file icons.
 
@@ -225,7 +226,8 @@ hide unnecessary details, colorize file attributes, and show modern file icons.
   :ensure nil
   :commands (dired dired-jump)
   :hook (dired-mode . dired-hide-details-mode)
-  :bind ("C-d" . dired-jump)
+  :bind (("C-d" . dired-jump)
+         ("C-c e" . (lambda () (interactive) (dired user-emacs-directory))))
   :custom
   (dired-listing-switches "-agho --group-directories-first"))
 
@@ -241,7 +243,6 @@ hide unnecessary details, colorize file attributes, and show modern file icons.
 #+end_src 
 
 ** Advanced Search & Orderless Matching (~orderless~ & ~consult~)
-
 Replaces standard search with fuzzy multi-word completion and high-speed project search.
 
 #+begin_src emacs-lisp
@@ -275,9 +276,8 @@ Intelligent code completion, dynamic delimiter coloring, and automatic bracket p
 management to streamline text editing across various programming environments.
 
 ** In-Buffer Completion (~company~)
-
 Provides modern text and code auto-completion. Uses ~M-j~/~M-k~ for navigation 
-and ~TAB~ to insert the selection, leaving ~RET~ strictly for newlines.
+and ~TAB~ to insert the selection, leaving ~RET~ free for default newline behavior.
 
 #+begin_src emacs-lisp
 (use-package company
@@ -285,47 +285,47 @@ and ~TAB~ to insert the selection, leaving ~RET~ strictly for newlines.
   :defer t
   :hook ((prog-mode . company-mode)
          (geiser-repl-mode . company-mode)
-		 (org-src-mode . company-mode))
+         (org-src-mode . company-mode))
   :custom
   (company-minimum-prefix-length 1)
   (company-idle-delay 0.0)
   (company-selection-wrap-around t)
   (company-tooltip-align-annotations t)
+  :config
+  ;; Safely remove RET from blocking newlines
+  (with-eval-after-load 'company
+    (define-key company-active-map (kbd "RET") nil)
+    (define-key company-active-map (kbd "<return>") nil))
   :bind
   (("C-SPC" . company-complete)
    :map company-active-map
    ("M-j" . company-select-next)
    ("M-k" . company-select-previous)
    ("<tab>" . company-complete-selection)
-   ("TAB" . company-complete-selection)
-   ("<enter>" . nil)
-   ("RET" . nil)
-   ("C-h" . nil)))
+   ("TAB" . company-complete-selection)))
 #+end_src
 
 ** Smart Parentheses (~smartparens~)
-
 Automatic insertion, structural editing, and strict pairing for code and notes.
-Disables apostrophe auto-pairing to prevent issues with Lisp quote notation (~'~).
 
 #+begin_src emacs-lisp
 (use-package smartparens
   :ensure t
-  :hook (((org-mode org-src-mode) . smartparens-mode)
+  :hook (((prog-mode geiser-repl-mode org-mode) . smartparens-mode)
          ((prog-mode geiser-repl-mode) . smartparens-strict-mode))
   :config
   (require 'smartparens-config)
   
   ;; Disable single-quote auto-pairing specifically for programming and Lisp modes
-    (sp-with-modes '(prog-mode geiser-repl-mode emacs-lisp-mode lisp-interaction-mode)
-      (sp-local-pair "'" nil :actions nil))
+  (sp-with-modes '(prog-mode geiser-repl-mode emacs-lisp-mode lisp-interaction-mode racket-mode)
+    (sp-local-pair "'" nil :actions nil))
 
-    ;; Enable auto-pairing for Org-specific formatting tags
-    (sp-with-modes 'org-mode
-      (sp-local-pair "*" nil :actions nil)
-      (sp-local-pair "=" nil :actions nil)
-      (sp-local-pair "~" nil :actions nil)
-      (sp-local-pair "/" nil :actions nil))
+  ;; Enable auto-pairing for Org-specific formatting tags
+  (sp-with-modes 'org-mode
+    (sp-local-pair "*" nil :actions nil)
+    (sp-local-pair "=" nil :actions nil)
+    (sp-local-pair "~" nil :actions nil)
+    (sp-local-pair "/" nil :actions nil))
 
   ;; Disable overlay highlights
   (setq sp-highlight-pair-overlay nil)
@@ -334,7 +334,6 @@ Disables apostrophe auto-pairing to prevent issues with Lisp quote notation (~'~
 #+end_src
 
 ** Rainbow Delimiters (~rainbow-delimiters~)
-
 Colorizes matching parentheses, brackets, and braces according to their depth.
 
 #+begin_src emacs-lisp
@@ -344,7 +343,6 @@ Colorizes matching parentheses, brackets, and braces according to their depth.
 #+end_src
 
 ** Floating Command Palette (~vertico~ & ~vertico-posframe~)
-
 Provides a centered, floating completion UI for ~M-x~, file navigation, and buffer switching, 
 complemented by ~marginalia~ for rich parameter descriptions.
 
@@ -383,7 +381,6 @@ Comprehensive configuration for document authoring, Babel code block execution a
 (Python, Racket, Graphviz), and modern visual styling for headlines and markup.
 
 ** Core Org Settings & Babel Execution (~org~)
-
 Configures Org Mode with Babel language evaluation (Python, JS, Graphviz Dot, Racket), 
 disables evaluation confirmation prompts, and sets keybindings for inserting code blocks.
 
@@ -394,8 +391,7 @@ disables evaluation confirmation prompts, and sets keybindings for inserting cod
 (use-package org
   :ensure nil
   :hook (org-mode . visual-line-mode)
-  :bind (:map org-mode-map
-              ("s-i" . (lambda () (interactive) (insert "#+begin_src \n#+end_src") (forward-line -1) (end-of-line))))
+  
   :custom
   ;; Babel execution settings
   (org-confirm-babel-evaluate nil)
@@ -412,7 +408,6 @@ disables evaluation confirmation prompts, and sets keybindings for inserting cod
 #+end_src
 
 ** Org Babel Racket Integration (~ob-racket~)
-
 Enables execution of Racket and Scribble source code blocks within Org documents.
 
 #+begin_src emacs-lisp
@@ -422,7 +417,6 @@ Enables execution of Racket and Scribble source code blocks within Org documents
 #+end_src
 
 ** Modern UI Styling (~org-modern~)
-
 Enhances Org Mode with modern typography, hidden markup characters, and styled bullet icons.
 
 #+begin_src emacs-lisp
@@ -445,13 +439,114 @@ Enhances Org Mode with modern typography, hidden markup characters, and styled b
 #+end_src
 
 ** Automatic Table of Contents (~toc-org~)
-
 Automatically updates the Table of Contents whenever the Org file is saved.
 
 #+begin_src emacs-lisp
 (use-package toc-org
   :ensure t
   :hook (org-mode . toc-org-enable))
+#+end_src
+
+** Smart Source Block Management & Auto-REPL
+Handles safe creation, background REPL initialization, and smart buffer evaluation 
+for Org source blocks across multiple languages (Racket, Python, Elisp).
+
+*** 1. Safe Source Block Insertion 
+#+begin_src emacs-lisp
+(defun my/org-insert-src-block (lang)
+  "Prompt for a LANG, insert a clean block, and safely open it."
+  (interactive
+   (list (completing-read "Language: "
+                          '("racket" "python" "emacs-lisp" "scheme"))))
+  
+  ;; Use string= for string comparison
+  (if (string= lang "racket")
+      (insert (format "#+begin_src %s\n#lang racket\n\n#+end_src" lang))
+    (insert (format "#+begin_src %s\n\n#+end_src" lang)))
+  
+  (forward-line -1)
+  (org-edit-special))
+
+(with-eval-after-load 'org
+  (define-key org-mode-map (kbd "s-i") #'my/org-insert-src-block))
+#+end_src
+
+*** 2. Manual & Silent Background REPL Starter
+#+begin_src emacs-lisp
+;; Global option to prevent Geiser from popping up the REPL window
+(setq geiser-repl-pop-to-buffer-p nil) 
+;; Force Geiser to use Racket by default
+(setq geiser-default-implementation 'racket)
+
+(defun my/start-repl-background ()
+  "Start the REPL silently in the background without modifying windows."
+  (interactive)
+  (cond
+   ((derived-mode-p 'racket-mode)
+    (save-window-excursion
+      (run-geiser 'racket))
+    (message "🚀 Racket REPL ready in the background."))
+
+   ((derived-mode-p 'python-mode)
+    (unless (python-shell-get-process)
+      (save-window-excursion
+        (run-python (python-shell-parse-command) nil nil)))
+    (message "🚀 Python REPL ready in the background."))
+
+   (t (message "No REPL configured for this language."))))
+
+;; Bind to C-c r inside the C-c ' edit buffer
+(with-eval-after-load 'org-src
+  (define-key org-src-mode-map (kbd "C-c r") #'my/start-repl-background))
+#+end_src
+
+*** 3. Smart Buffer Evaluation (Run File)
+#+begin_src emacs-lisp
+(defun my/org-src-eval-buffer ()
+  "Evaluate the entire source buffer dynamically depending on the language."
+  (interactive)
+  (cond
+   ((derived-mode-p 'racket-mode)
+    (geiser-mode 1) ;; Wake up Geiser if it was inactive
+    (geiser-eval-buffer)
+    (message "🚀 Racket: Full file evaluated in Geiser."))
+   
+   ((derived-mode-p 'python-mode)
+    (python-shell-send-buffer)
+    (message "🚀 Python: Full file evaluated."))
+   
+   ((derived-mode-p 'emacs-lisp-mode)
+    (eval-buffer)
+    (message "🚀 Elisp: Full file evaluated."))
+   
+   (t (message "No automatic evaluation defined for this mode."))))
+
+;; Bind C-c C-b to our custom evaluator inside the edit window
+(with-eval-after-load 'org-src
+  (define-key org-src-mode-map (kbd "C-c C-b") #'my/org-src-eval-buffer))
+
+;; Ensure standard Geiser shortcuts (like C-x C-e) work in Racket mode
+(add-hook 'racket-mode-hook #'geiser-mode)
+#+end_src
+
+
+** Smart Source Block Editing
+Automatically opens `org-edit-special` when pressing RET on a source block header.
+
+#+begin_src emacs-lisp
+  (defun my/org-smart-dwim (orig-fun &rest args)
+    "If cursor is on a src block header, open it. Otherwise, execute standard RET."
+    (interactive "P")
+    (let ((element (org-element-at-point)))
+      (if (and (eq (org-element-type element) 'src-block)
+               (= (line-number-at-pos)
+                  (line-number-at-pos (org-element-property :post-affiliated element))))
+          (org-edit-special)
+        (apply orig-fun args))))
+
+  ;; Advise org-return to use our smart behavior
+  (with-eval-after-load 'org
+    (advice-add 'org-return :around #'my/org-smart-dwim))
 #+end_src
 
 
@@ -511,4 +606,33 @@ Standard editing shortcuts (~Select All~, ~Paste~, ~Undo~) and Vim-style window 
  ("M-k"       . windmove-up)
  ("M-<down>"  . windmove-down)
  ("M-j"       . windmove-down))
+#+end_src
+
+* Git Integration
+Powerful interface for Git operations and real-time gutter indicators for modified lines.
+
+** Git Interface (~magit~)
+The absolute best Git porcelain interface available. Prefers opening full-screen for clarity.
+
+#+begin_src emacs-lisp
+(use-package magit
+  :ensure t
+  :bind ("C-x g" . magit-status)
+  :custom
+  (magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1))
+#+end_src
+
+** Gutter Git Indicators (~diff-hl~)
+Highlights uncommitted changes (adds, deletes, modifications) in the fringe/gutter area.
+
+#+begin_src emacs-lisp
+(use-package diff-hl
+  :ensure t
+  :hook ((prog-mode . diff-hl-mode)
+         (org-mode . diff-hl-mode)
+         (dired-mode . diff-hl-dired-mode-unless-remote))
+  :config
+  ;; Refresh indicators after staging changes with Magit
+  (add-hook 'magit-pre-refresh-hook 'diff-hl-fringe-source-begin)
+  (add-hook 'magit-post-refresh-hook 'diff-hl-fringe-source-end))
 #+end_src
