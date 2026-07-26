@@ -136,6 +136,15 @@ Prevents compilation warning buffers from popping up during package installation
 ;;(setq warning-minimum-level :error)
 #+end_src 
 
+** Keybinding Helper (~which-key~)
+Displays available keybindings in a popup panel when starting a key sequence.
+
+#+begin_src emacs-lisp
+(use-package which-key
+  :ensure t
+  :init (which-key-mode 1))
+#+end_src 
+
 
 * Appearance & UI
 Visual enhancements, color themes, modeline configurations, and buffer indicator styles 
@@ -214,6 +223,30 @@ Enables relative or absolute line numbers exclusively in programming buffers (~p
 #+begin_src emacs-lisp
 (use-package display-line-numbers
   :hook (prog-mode . display-line-numbers-mode))
+#+end_src 
+
+** Cursor Flash (~beacon~)
+Flashes the cursor line whenever switching windows or scrolling long distances.
+Uses the Omarchy neon green palette for visual harmony.
+
+#+begin_src emacs-lisp
+(use-package beacon
+  :ensure t
+  :init
+  (beacon-mode 1)
+  :custom
+  (beacon-color "#15B046")
+  (beacon-blink-when-window-scrolls t)
+  (beacon-blink-when-window-changes t))
+#+end_src 
+
+** Frame Padding (~spacious-padding~)
+Provides elegant, breathable spacing around windows, frames, and mode-lines.
+
+#+begin_src emacs-lisp
+(use-package spacious-padding
+  :ensure t
+  :init (spacious-padding-mode 1))
 #+end_src 
 
 
@@ -364,6 +397,12 @@ complemented by ~marginalia~ for rich parameter descriptions.
   :ensure t
   :init
   (marginalia-mode 1))
+
+;; Nerd-icons-completion: Rich icons next to Vertico candidates
+(use-package nerd-icons-completion
+  :ensure t
+  :after vertico
+  :hook (vertico-mode . nerd-icons-completion-mode))
 
 ;; Vertico-Posframe: Renders Vertico as a centered floating overlay
 (use-package vertico-posframe
@@ -599,8 +638,9 @@ Standard editing shortcuts (~Select All~, ~Paste~, ~Undo~) and Vim-style window 
 (bind-keys
  ;; Common editing shortcuts
  ("C-a" . mark-whole-buffer)
- ("C-v" . yank)
- ("C-z" . undo)
+  ("C-v" . yank)
+  ("C-z" . undo)
+  ("C-/" . comment-line)
 
  ;; Quick Help (replaces C-h o / describe-symbol)
  ("s-h" . describe-symbol)
