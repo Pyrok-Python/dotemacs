@@ -50,6 +50,10 @@ The ~no-littering~ package automatically redirects temporary and state files
 created by Emacs and its packages to the ~var/~ and ~etc/~ subdirectories inside =~/.emacs.d/=.
 
 #+begin_src emacs-lisp
+;; Garbage Collection & I/O Performance Optimizations
+(setq gc-cons-threshold (* 50 1024 1024))
+(setq read-process-output-max (* 3 1024 1024))
+
 (use-package no-littering
   :ensure t
   :demand t
@@ -109,7 +113,7 @@ Configure tab width to 4 spaces.
 
 #+begin_src emacs-lisp
 (setq-default tab-width 4)
-(setq-default indent-tabs-mode t)
+(setq-default indent-tabs-mode nil)
 (setq backward-delete-char-untabify-method nil)
 #+end_src
 
@@ -226,7 +230,7 @@ hide unnecessary details, colorize file attributes, and show modern file icons.
   :ensure nil
   :commands (dired dired-jump)
   :hook (dired-mode . dired-hide-details-mode)
-  :bind (("C-d" . dired-jump)
+  :bind (("C-x C-j" . dired-jump)
          ("C-c e" . (lambda () (interactive) (dired user-emacs-directory))))
   :custom
   (dired-listing-switches "-agho --group-directories-first"))
@@ -288,7 +292,7 @@ and ~TAB~ to insert the selection, leaving ~RET~ free for default newline behavi
          (org-src-mode . company-mode))
   :custom
   (company-minimum-prefix-length 1)
-  (company-idle-delay 0.0)
+  (company-idle-delay 0.08)
   (company-selection-wrap-around t)
   (company-tooltip-align-annotations t)
   :config
@@ -423,7 +427,6 @@ Enhances Org Mode with modern typography, hidden markup characters, and styled b
   (use-package org-modern
     :ensure t
     :demand t
-    :hook (org-mode . org-modern-mode)
     :custom
     (org-auto-align-tags nil)
     (org-tags-column 0)
@@ -571,17 +574,22 @@ Translate ~C-i~ and ~C-[~ to super combinations (~s-i~ / ~s-[~) across newly cre
 Remove conflicting built-in global and mode-specific keybindings.
 
 #+begin_src emacs-lisp
-  ;; Unbind mode-specific C-M-i bindings
-  (keymap-unset lisp-interaction-mode-map "C-M-i" t)
-  (keymap-unset emacs-lisp-mode-map "C-M-i" t)
-
-  ;; Global and mode-specific unbinds
+  ;; Global unbinds
   (dolist (key '("C-z" "C-a" "C-n" "C-o" "C-p"
                  "C-t" "C-]" "H-[" "M-e" "C-y"
                  "C-k" "C-l" "H-i" "C-j"
                  "s-j" "s-l" "s-i" "s-k" "s-["))
-    (keymap-global-unset key t)
-    (keymap-unset lisp-interaction-mode-map key t))
+    (keymap-global-unset key t))
+
+  ;; Safe unbinds after elisp-mode loads
+  (with-eval-after-load 'elisp-mode
+    (keymap-unset lisp-interaction-mode-map "C-M-i" t)
+    (keymap-unset emacs-lisp-mode-map "C-M-i" t)
+    (dolist (key '("C-z" "C-a" "C-n" "C-o" "C-p"
+                   "C-t" "C-]" "H-[" "M-e" "C-y"
+                   "C-k" "C-l" "H-i" "C-j"
+                   "s-j" "s-l" "s-i" "s-k" "s-["))
+      (keymap-unset lisp-interaction-mode-map key t)))
 #+end_src
 
 ** Global Shortcuts & Window Navigation
