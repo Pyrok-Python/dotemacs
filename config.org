@@ -13,11 +13,13 @@
   - [[#indentation--tabs][Indentation & Tabs]]
   - [[#help-window-management-quit-window][Help Window Management (~quit-window~)]]
   - [[#suppress-compiler-warnings][Suppress Compiler Warnings]]
+  - [[#keybinding-helper-which-key][Keybinding Helper (~which-key~)]]
 - [[#appearance--ui][Appearance & UI]]
   - [[#pretty-symbols][Pretty Symbols]]
   - [[#color-themes-ef-themes][Color Themes (~ef-themes~)]]
   - [[#modeline-doom-modeline][Modeline (~doom-modeline~)]]
   - [[#line-numbers-display-line-numbers][Line Numbers (~display-line-numbers~)]]
+  - [[#cursor-flash-beacon][Cursor Flash (~beacon~)]]
 - [[#file--buffer-management][File & Buffer Management]]
   - [[#file-management-dired][File Management (~dired~)]]
   - [[#advanced-search--orderless-matching-orderless--consult][Advanced Search & Orderless Matching (~orderless~ & ~consult~)]]
@@ -86,6 +88,7 @@ Disable unnecessary UI elements and configure cursor and search scrolling behavi
 (delete-selection-mode 1)                         ; Replace selected text when typing
 (setq isearch-allow-scroll 'unlimited)            ; Allow scrolling during isearch
 (setq help-window-select t)                       ; Automatically focus *Help* windows
+(setq-default cursor-in-non-selected-windows nil) ; Hide cursor in non-selected window
 #+end_src 
 
 ** Typography & Fonts
@@ -149,42 +152,31 @@ Visual enhancements, color themes, modeline configurations, and buffer indicator
 to create a cohesive, readable, and modern interface.
 
 ** Pretty Symbols
+Configures clean, mathematical pretty symbol replacements for Scheme and Racket programming environments.
+
 #+begin_src emacs-lisp
-(defun cl-pretty-symbols ()
-  "This function enables pretty symbols for cl-like lisps."
-  (setq prettify-symbols-alist
-    '(("lambda"       . ?λ)
-      ("defun"        . ?󰊕)
-      ("defmacro"     . ?󰡷)
-      ("defparameter" . ?)
-      ("defvar"       . ?󰕷)
-      ("cond"         . ?󰘬)
-      ("!="           . ?≠)
-      ("<="           . ?≤)
-      (">="           . ?≥)
-      ("list"         . ?ℒ)
-      ("nil"          . ?∅)))
-  (prettify-symbols-mode 1))
-
 (defun scheme-pretty-symbols ()
-  "This function enables pretty symbols for scheme-like lisps."
+  "Enable mathematical and clean pretty symbols for Racket and Scheme."
   (setq prettify-symbols-alist
-    '(("lambda"       . ?λ)
-      ("define"       . ?𝒹)
-      ("cond"         . ?󰘬)
-      ("!="           . ?≠)
-      ("<="           . ?≤)
-      (">="           . ?≥)
-      ("list"         . ?ℒ)
-      ("null"         . ?∅)))
+        '(("lambda"       . ?λ)
+          ("define"       . ?𝒹)
+          ("struct"       . ?󰆧)
+          ("require"      . ?⤓)
+          ("cond"         . ?󰘬)
+          ("->"           . ?→)
+          ("=>"           . ?⇒)
+          ("<-"           . ?←)
+          ("/="           . ?≠)
+          ("<="           . ?≤)
+          (">="           . ?≥)
+          ("list"         . ?ℒ)
+          ("empty"        . ?∅)
+          ("null"          . ?∅)))
   (prettify-symbols-mode 1))
 
-;; Pretty symbols hooks.
-;;(add-hook 'emacs-lisp-mode-hook       #'cl-pretty-symbols)
-;;(add-hook 'lisp-interaction-mode-hook #'cl-pretty-symbols)
-;;(add-hook 'lisp-mode-hook             #'cl-pretty-symbols)
-;;(add-hook 'racket-mode-hook           #'scheme-pretty-symbols)
-;;(add-hook 'scheme-mode-hook           #'scheme-pretty-symbols)
+;; Enable pretty symbols in Racket and Scheme modes
+(add-hook 'racket-mode-hook #'scheme-pretty-symbols)
+(add-hook 'scheme-mode-hook #'scheme-pretty-symbols)
 #+end_src
 
 ** Color Themes (~ef-themes~)
