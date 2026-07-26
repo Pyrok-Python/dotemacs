@@ -86,7 +86,6 @@ Disable unnecessary UI elements and configure cursor and search scrolling behavi
 (delete-selection-mode 1)                         ; Replace selected text when typing
 (setq isearch-allow-scroll 'unlimited)            ; Allow scrolling during isearch
 (setq help-window-select t)                       ; Automatically focus *Help* windows
-(setq-default cursor-in-non-selected-windows nil) ; Hide cursor in inactive windows
 #+end_src 
 
 ** Typography & Fonts
@@ -114,7 +113,6 @@ Configure tab width to 4 spaces.
 #+begin_src emacs-lisp
 (setq-default tab-width 4)
 (setq-default indent-tabs-mode nil)
-(setq backward-delete-char-untabify-method nil)
 #+end_src
 
 ** Help Window Management (~quit-window~)
@@ -214,6 +212,8 @@ A minimalist and modern status line powered by ~all-the-icons~.
 (use-package doom-modeline
   :ensure t
   :demand t
+  :custom
+  (doom-modeline-bar-width 3)
   :init (doom-modeline-mode 1))
 #+end_src 
 
@@ -240,14 +240,6 @@ Uses the Omarchy neon green palette for visual harmony.
   (beacon-blink-when-window-changes t))
 #+end_src 
 
-** Frame Padding (~spacious-padding~)
-Provides elegant, breathable spacing around windows, frames, and mode-lines.
-
-#+begin_src emacs-lisp
-(use-package spacious-padding
-  :ensure t
-  :init (spacious-padding-mode 1))
-#+end_src 
 
 
 * File & Buffer Management
@@ -301,10 +293,7 @@ Replaces standard search with fuzzy multi-word completion and high-speed project
    ("C-c g"   . consult-ripgrep)          ; Live grep inside files with ripgrep
    ("C-s"     . consult-line)             ; Search text inside current buffer with preview
    :map minibuffer-local-map
-   ("M-s"     . consult-history))
-  :init
-  ;; Live preview setup
-  (setq consult-preview-key 'any))
+   ("M-s"     . consult-history)))
 #+end_src 
 
 
