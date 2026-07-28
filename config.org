@@ -39,6 +39,7 @@
   - [[#key-translations][Key Translations]]
   - [[#unset-default-shortcuts][Unset Default Shortcuts]]
   - [[#global-shortcuts--window-navigation][Global Shortcuts & Window Navigation]]
+  - [[#lisp-shared][Lisp Shared]]
 - [[#git-integration][Git Integration]]
   - [[#git-interface-magit][Git Interface (~magit~)]]
   - [[#gutter-git-indicators-diff-hl][Gutter Git Indicators (~diff-hl~)]]
@@ -636,6 +637,67 @@ Standard editing shortcuts (~Select All~, ~Paste~, ~Undo~) and Vim-style window 
  ("M-<down>"  . windmove-down)
  ("M-j"       . windmove-down))
 #+end_src
+
+** Lisp Shared
+
+#+begin_src emacs-lisp
+(defun my/backward-transpose-sexp ()
+  (interactive)
+  (sp-transpose-sexp -1))
+
+(defun my/kill-whitespace ()
+  (interactive)
+  (let ((start (point)))
+    (skip-chars-forward " \t\n\r\f")
+    (when (> (point) start)
+      (delete-region start (point))
+      t)))
+
+(defun my/kill-whitespace-backward ()
+  (interactive)
+  (let ((start (point)))
+    (skip-chars-backward " \t\n\r\f")
+    (when (< (point) start)
+      (delete-region (point) start)
+      t)))
+
+(defun my/kill-whitespace-or-sexp ()
+  (interactive)
+  (unless (my/kill-whitespace)
+    (sp-kill-sexp)))
+
+(defun my/kill-whitespace-or-sexp-backward ()
+  (interactive)
+  (unless (my/kill-whitespace-backward)
+    (sp-backward-kill-sexp)))
+
+(defun my/lisp-editing-keybinds (keymap)
+  ;; C-M-[key] (Ctrl + Alt + [key])
+  ;; (define-key keymap (kbd "M-<left>") #'my/backward-transpose-sexp)
+  ;; (define-key keymap (kbd "M-<right>") #'sp-transpose-sexp)
+  ;; (define-key keymap (kbd "M-<up>") #'my/backward-transpose-sexp)
+  ;; (define-key keymap (kbd "M-<down>") #'sp-transpose-sexp)
+
+  ;; C-[Arrows]
+  (define-key keymap (kbd "C-<left>")  #'backward-sexp)
+  (define-key keymap (kbd "C-<right>") #'forward-sexp)
+  (define-key keymap (kbd "C-<up>")    #'backward-sexp)
+  (define-key keymap (kbd "C-<down>")  #'forward-sexp)
+  
+  ;;; ast-actions
+  (define-key keymap (kbd "H-[") #'sp-backward-slurp-sexp)
+  (define-key keymap (kbd "C-]") #'sp-backward-barf-sexp)
+  (define-key keymap (kbd "M-[") #'sp-forward-barf-sexp)
+  (define-key keymap (kbd "M-]") #'sp-forward-slurp-sexp)
+  (define-key keymap (kbd "C-r") #'raise-sexp)
+  (define-key keymap (kbd "C-(") #'sp-backward-unwrap-sexp)
+  (define-key keymap (kbd "C-)") #'sp-unwrap-sexp)
+  (define-key keymap (kbd "C-<delete>") #'my/kill-whitespace-or-sexp)
+  (define-key keymap (kbd "C-<backspace>") #'my/kill-whitespace-or-sexp-backward))
+
+(my/lisp-editing-keybinds lisp-mode-shared-map)
+#+end_src
+
 
 * Git Integration
 Powerful interface for Git operations and real-time gutter indicators for modified lines.
