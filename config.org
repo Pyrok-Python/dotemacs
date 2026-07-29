@@ -161,7 +161,8 @@ Configures clean, mathematical pretty symbol replacements for Scheme and Racket 
   (setq prettify-symbols-alist
         '(("lambda"       . ?λ)
           ("define"       . ?𝒹)
-          ("struct"       . ?󰆧)
+          ("struct"       . ?⎕)
+          ("struct:"      . ?⍠)
           ("require"      . ?⤓)
           ("cond"         . ?󰘬)
           ("->"           . ?→)
@@ -708,7 +709,6 @@ The absolute best Git porcelain interface available. Prefers opening full-screen
 #+begin_src emacs-lisp
 (use-package magit
   :ensure t
-
   :bind ("C-x g" . magit-status)
   :custom
   (magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1))
