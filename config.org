@@ -100,7 +100,7 @@ Apply ~Hack Nerd Font~ globally as the primary monospace font family.
                     :font "Hack Nerd Font"
                     :height 120
                     :weight 'regular)
-#+end_src
+#+end_src 
 
 ** Startup Screen & Initial Buffer
 Start directly into a clean ~*scratch*~ buffer set up in ~org-mode~.
@@ -109,7 +109,7 @@ Start directly into a clean ~*scratch*~ buffer set up in ~org-mode~.
 (setq inhibit-startup-screen t)
 (setq initial-scratch-message nil)
 (setq initial-major-mode 'org-mode)
-#+end_src
+#+end_src 
 
 ** Indentation & Tabs
 Configure tab width to 4 spaces.
@@ -117,7 +117,7 @@ Configure tab width to 4 spaces.
 #+begin_src emacs-lisp
 (setq-default tab-width 4)
 (setq-default indent-tabs-mode nil)
-#+end_src
+#+end_src 
 
 ** Help Window Management (~quit-window~)
 Ensure pressing ~q~ in help buffers completely kills the buffer instead of just burying it.
@@ -128,7 +128,7 @@ Ensure pressing ~q~ in help buffers completely kills the buffer instead of just 
   "Ensure `quit-window' always kills the buffer when called interactively."
   (when (called-interactively-p 'interactive)
     (setq kill t)))
-#+end_src
+#+end_src 
 
 ** Suppress Compiler Warnings
 Prevents compilation warning buffers from popping up during package installation.
@@ -136,7 +136,7 @@ Prevents compilation warning buffers from popping up during package installation
 #+begin_src emacs-lisp
 ;;(setq native-comp-async-report-warnings-errors nil)
 ;;(setq warning-minimum-level :error)
-#+end_src 
+#+end_src  
 
 ** Keybinding Helper (~which-key~)
 Displays available keybindings in a popup panel when starting a key sequence.
@@ -145,7 +145,7 @@ Displays available keybindings in a popup panel when starting a key sequence.
 (use-package which-key
   :ensure t
   :init (which-key-mode 1))
-#+end_src 
+#+end_src  
 
 
 * Appearance & UI
@@ -180,7 +180,7 @@ Configures clean, mathematical pretty symbol replacements for Scheme and Racket 
 ;; Enable pretty symbols in Racket and Scheme modes
 (add-hook 'racket-mode-hook #'scheme-pretty-symbols)
 (add-hook 'scheme-mode-hook #'scheme-pretty-symbols)
-#+end_src
+#+end_src 
 
 ** Color Themes (~ef-themes~)
 Colorful, high-contrast, and legible themes crafted by Protesilaos Stavrou.
@@ -228,11 +228,21 @@ Uses the Omarchy neon green palette for visual harmony.
 (use-package beacon
   :ensure t
   :init
+  (cl-flet ((beacon-sync-color (&rest _)
+              "Actualiza el color del beacon al del cursor actual."
+              (when (facep 'cursor)
+                (setq beacon-color (face-attribute 'cursor :background))))))  
   (beacon-mode 1)
   :custom
-  (beacon-color "#15B046")
   (beacon-blink-when-window-scrolls t)
-  (beacon-blink-when-window-changes t))
+  (beacon-blink-when-window-changes t)
+  :config
+  
+  ;; Ejecutar al iniciar la ventana
+  (add-hook 'window-setup-hook #'beacon-sync-color)
+  
+  ;; Ejecutar cada vez que se carga un tema nuevo
+  (advice-add 'load-theme :after #'beacon-sync-color))
 #+end_src 
 
 
@@ -264,7 +274,7 @@ hide unnecessary details, colorize file attributes, and show modern file icons.
 (use-package diredfl
   :ensure t
   :hook (dired-mode . diredfl-mode))
-#+end_src 
+#+end_src  
 
 ** Advanced Search & Orderless Matching (~orderless~ & ~consult~)
 Replaces standard search with fuzzy multi-word completion and high-speed project search.
@@ -283,7 +293,7 @@ Replaces standard search with fuzzy multi-word completion and high-speed project
   :ensure t
   :bind
   ;; File and Buffer Search
-  (("C-b"   . consult-buffer)             ; Enhanced buffer switcher with preview
+  (("C-b"     . consult-buffer)           ; Enhanced buffer switcher with preview
    ("C-c f"   . consult-fd)               ; Find files using 'fd' (very fast)
    ("C-c g"   . consult-ripgrep)          ; Live grep inside files with ripgrep
    ("C-s"     . consult-line)             ; Search text inside current buffer with preview
@@ -324,7 +334,7 @@ and ~TAB~ to insert the selection, leaving ~RET~ free for default newline behavi
    ("M-k" . company-select-previous)
    ("<tab>" . company-complete-selection)
    ("TAB" . company-complete-selection)))
-#+end_src
+#+end_src 
 
 ** Smart Parentheses (~smartparens~)
 Automatic insertion, structural editing, and strict pairing for code and notes.
@@ -395,7 +405,7 @@ complemented by ~marginalia~ for rich parameter descriptions.
   :init
   (vertico-posframe-mode 1)
   :custom
-  (vertico-posframe-poshandler #'posframe-poshandler-frame-center)
+  (vertico-posframe-poshandler #'posframe-poshandler-frame-bottom-center)
   (vertico-posframe-border-width 2)
   (vertico-posframe-parameters
    '((left-fringe . 8)
