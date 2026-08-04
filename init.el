@@ -22,7 +22,7 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
 ;; Uncomment to profile `init.el'
-(setq use-package-compute-statistics t)
+;; (setq use-package-compute-statistics t)
 
 ;; Default behavior for use-package
 (setq use-package-always-defer t)
@@ -38,6 +38,6 @@
 ;; ---------------------------------------------------------------------------
 (add-hook 'emacs-startup-hook
           (lambda ()
-            (setq gc-cons-threshold (* 2 1024 1024))
+            (setq gc-cons-threshold (* 10 1024 1024))
             (message "Emacs successfully loaded in %s" (emacs-init-time))))
 (put 'narrow-to-region 'disabled nil)
