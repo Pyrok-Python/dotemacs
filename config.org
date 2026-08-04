@@ -229,17 +229,17 @@ Uses the Omarchy neon green palette for visual harmony.
 (use-package beacon
   :ensure t
   :init
-  (cl-flet ((beacon-sync-color (&rest _)
-              "Actualiza el color del beacon al del cursor actual."
-              (when (facep 'cursor)
-                (setq beacon-color (face-attribute 'cursor :background))))))  
   (beacon-mode 1)
   :custom
   (beacon-blink-when-window-scrolls t)
   (beacon-blink-when-window-changes t)
   :config
+  (defun beacon-sync-color (&rest _)
+    "Actualiza el color del beacon al del cursor actual."
+    (when (facep 'cursor)
+      (setq beacon-color (face-attribute 'cursor :background))))
   
-  ;; Ejecutar al iniciar la ventana
+;; Ejecutar al iniciar la ventana
   (add-hook 'window-setup-hook #'beacon-sync-color)
   
   ;; Ejecutar cada vez que se carga un tema nuevo
