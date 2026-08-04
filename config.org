@@ -20,6 +20,7 @@
   - [[#modeline-doom-modeline][Modeline (~doom-modeline~)]]
   - [[#line-numbers-display-line-numbers][Line Numbers (~display-line-numbers~)]]
   - [[#cursor-flash-beacon][Cursor Flash (~beacon~)]]
+  - [[#ultra-scroll-ultra-scroll][Ultra Scroll (ultra-scroll)]]
 - [[#file--buffer-management][File & Buffer Management]]
   - [[#file-management-dired][File Management (~dired~)]]
   - [[#advanced-search--orderless-matching-orderless--consult][Advanced Search & Orderless Matching (~orderless~ & ~consult~)]]
@@ -245,7 +246,18 @@ Uses the Omarchy neon green palette for visual harmony.
   (advice-add 'load-theme :after #'beacon-sync-color))
 #+end_src 
 
+** Ultra Scroll (ultra-scroll)
 
+#+begin_src emacs-lisp
+(use-package ultra-scroll
+  ;;:vc (:url "https://github.com/jdtsmith/ultra-scroll") ; if desired (emacs>=v30)
+  :ensure t
+  :init
+  (setq scroll-conservatively 3 ; or whatever value you prefer, since v0.4
+        scroll-margin 0)        ; important: scroll-margin>0 not yet supported
+  :config
+  (ultra-scroll-mode 1))
+#+end_src
 
 * File & Buffer Management
 Streamlined tools for directory navigation, file manipulation, and active buffer management 
