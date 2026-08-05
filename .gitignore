@@ -1,32 +1,12 @@
-# Auto-downloaded packages and ELN byte-code compilation cache
-elpa/
-eln-cache/
-url/
-bookmarks
+# Ignore everything by default
+*
 
-# Auto-generated Elisp file from Org Babel
-config.el
+# Allow directories to be traversed
+!*/
 
-# Legacy modular configuration folder
-config/
-
-# Temporary, backup, session locks, and auto-save files
-*~
-\#*\#
-.#*
-pyrok@*
-/.emacs.desktop
-/.emacs.desktop.lock
-*.elc
-init-old.el
-
-# Internal cache and state directories (no-littering output)
-.cache/
-etc/
-var/
-auto-save-list/
-transient/
-straight/
-
-# Local custom UI settings
-custom.el
+# Explicitly allow specific files
+!.gitignore
+!init.el
+!config.org
+!ob-racket/**
+!README.org
