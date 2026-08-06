@@ -29,6 +29,7 @@
   - [[#smart-parentheses-smartparens][Smart Parentheses (~smartparens~)]]
   - [[#rainbow-delimiters-rainbow-delimiters][Rainbow Delimiters (~rainbow-delimiters~)]]
   - [[#floating-command-palette-vertico--vertico-posframe][Floating Command Palette (~vertico~ & ~vertico-posframe~)]]
+  - [[#multiple-cursor][Multiple cursor]]
 - [[#org-mode-environment][Org Mode Environment]]
   - [[#core-org-settings--babel-execution-org][Core Org Settings & Babel Execution (~org~)]]
   - [[#org-babel-racket-integration-ob-racket][Org Babel Racket Integration (~ob-racket~)]]
@@ -424,6 +425,19 @@ complemented by ~marginalia~ for rich parameter descriptions.
      (right-fringe . 8))))
 #+end_src 
 
+** Multiple cursor
+#+begin_src emacs-lisp
+(use-package multiple-cursors
+  :ensure t
+  :demand t
+  :config (progn
+	    (keymap-unset mc/keymap "C-v")
+	    (keymap-unset mc/keymap "<return>")
+	    (global-set-key (kbd "C-M-<up>") #'mc/mark-previous-like-this)
+	    (global-set-key (kbd "C-M-<down>") #'mc/mark-next-like-this)
+	    (global-set-key (kbd "C-M-i") #'mc/mark-previous-like-this)
+	    (global-set-key (kbd "C-M-k") #'mc/mark-next-like-this)))
+#+end_src
 
 * Org Mode Environment
 Comprehensive configuration for document authoring, Babel code block execution across languages 
