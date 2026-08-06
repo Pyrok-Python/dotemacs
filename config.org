@@ -8,6 +8,7 @@
   - [[#directory-cleanup-no-littering][Directory Cleanup (~no-littering~)]]
 - [[#system-settings--native-options-emacs-native][System Settings & Native Options (~emacs-native~)]]
   - [[#minimalist-interface--ui][Minimalist Interface & UI]]
+  - [[#unset-default-shortcuts][Unset Default Shortcuts]]
   - [[#typography--fonts][Typography & Fonts]]
   - [[#startup-screen--initial-buffer][Startup Screen & Initial Buffer]]
   - [[#indentation--tabs][Indentation & Tabs]]
@@ -39,7 +40,6 @@
   - [[#smart-source-block-editing][Smart Source Block Editing]]
 - [[#custom-keybindings-keybinds][Custom Keybindings (~keybinds~)]]
   - [[#key-translations][Key Translations]]
-  - [[#unset-default-shortcuts][Unset Default Shortcuts]]
   - [[#global-shortcuts--window-navigation][Global Shortcuts & Window Navigation]]
   - [[#lisp-shared][Lisp Shared]]
 - [[#git-integration][Git Integration]]
@@ -93,6 +93,28 @@ Disable unnecessary UI elements and configure cursor and search scrolling behavi
 (setq help-window-select t)                       ; Automatically focus *Help* windows
 (setq-default cursor-in-non-selected-windows nil) ; Hide cursor in non-selected window
 #+end_src 
+
+** Unset Default Shortcuts
+Remove conflicting built-in global and mode-specific keybindings.
+
+#+begin_src emacs-lisp
+  ;; Global unbinds
+  (dolist (key '("C-z" "C-a" "C-n" "C-o" "C-p"
+                 "C-t" "C-]" "H-[" "M-e" "C-y"
+                 "C-k" "C-l" "H-i" "C-j"
+                 "s-j" "s-l" "s-i" "s-k" "s-["))
+    (keymap-global-unset key t))
+
+  ;; Safe unbinds after elisp-mode loads
+  (with-eval-after-load 'elisp-mode
+    (keymap-unset lisp-interaction-mode-map "C-M-i" t)
+    (keymap-unset emacs-lisp-mode-map "C-M-i" t)
+    (dolist (key '("C-z" "C-a" "C-n" "C-o" "C-p"
+                   "C-t" "C-]" "H-[" "M-e" "C-y"
+                   "C-k" "C-l" "H-i" "C-j"
+                   "s-j" "s-l" "s-i" "s-k" "s-["))
+      (keymap-unset lisp-interaction-mode-map key t)))
+#+end_src
 
 ** Typography & Fonts
 Apply ~Hack Nerd Font~ globally as the primary monospace font family.
@@ -627,28 +649,6 @@ Translate ~C-i~ and ~C-[~ to super combinations (~s-i~ / ~s-[~) across newly cre
 
   (add-hook 'after-make-frame-functions #'my/translate-keys)
   (my/translate-keys)
-#+end_src
-
-** Unset Default Shortcuts
-Remove conflicting built-in global and mode-specific keybindings.
-
-#+begin_src emacs-lisp
-  ;; Global unbinds
-  (dolist (key '("C-z" "C-a" "C-n" "C-o" "C-p"
-                 "C-t" "C-]" "H-[" "M-e" "C-y"
-                 "C-k" "C-l" "H-i" "C-j"
-                 "s-j" "s-l" "s-i" "s-k" "s-["))
-    (keymap-global-unset key t))
-
-  ;; Safe unbinds after elisp-mode loads
-  (with-eval-after-load 'elisp-mode
-    (keymap-unset lisp-interaction-mode-map "C-M-i" t)
-    (keymap-unset emacs-lisp-mode-map "C-M-i" t)
-    (dolist (key '("C-z" "C-a" "C-n" "C-o" "C-p"
-                   "C-t" "C-]" "H-[" "M-e" "C-y"
-                   "C-k" "C-l" "H-i" "C-j"
-                   "s-j" "s-l" "s-i" "s-k" "s-["))
-      (keymap-unset lisp-interaction-mode-map key t)))
 #+end_src
 
 ** Global Shortcuts & Window Navigation
