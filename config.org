@@ -19,7 +19,9 @@
   - [[#pretty-symbols][Pretty Symbols]]
   - [[#color-themes-ef-themes][Color Themes (~ef-themes~)]]
   - [[#modeline-doom-modeline][Modeline (~doom-modeline~)]]
+  - [[#highlight-symbol-at-cursor-idle-highlight][Highlight symbol at cursor (~idle-highlight~)]]
   - [[#line-numbers-display-line-numbers][Line Numbers (~display-line-numbers~)]]
+  - [[#blinking][Blinking]]
   - [[#cursor-flash-beacon][Cursor Flash (~beacon~)]]
   - [[#ultra-scroll-ultra-scroll][Ultra Scroll (ultra-scroll)]]
 - [[#file--buffer-management][File & Buffer Management]]
@@ -172,7 +174,7 @@ Prevents compilation warning buffers from popping up during package installation
 #+begin_src emacs-lisp
 ;;(setq native-comp-async-report-warnings-errors nil)
 ;;(setq warning-minimum-level :error)
-#+end_src  
+#+end_src   
 
 ** Keybinding Helper (~which-key~)
 Displays available keybindings in a popup panel when starting a key sequence.
@@ -216,7 +218,7 @@ Configures clean, mathematical pretty symbol replacements for Scheme and Racket 
 ;; Enable pretty symbols in Racket and Scheme modes
 (add-hook 'racket-mode-hook #'scheme-pretty-symbols)
 (add-hook 'scheme-mode-hook #'scheme-pretty-symbols)
-#+end_src 
+#+end_src  
 
 ** Color Themes (~ef-themes~)
 Colorful, high-contrast, and legible themes crafted by Protesilaos Stavrou.
@@ -234,7 +236,7 @@ Sets ~ef-bio~ as the default theme with a quick keybinding to rotate through ran
    ("C-S-p" . (lambda ()
 				(interactive)
                 (load-theme 'ef-bio :no-confirm)))))
-#+end_src 
+#+end_src  
 
 ** Modeline (~doom-modeline~)
 A minimalist and modern status line powered by ~all-the-icons~.
