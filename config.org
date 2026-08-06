@@ -246,7 +246,18 @@ A minimalist and modern status line powered by ~all-the-icons~.
   :custom
   (doom-modeline-bar-width 3)
   :init (doom-modeline-mode 1))
-#+end_src 
+#+end_src  
+
+** Highlight symbol at cursor (~idle-highlight~)
+Highlight the all visible occurrances of the identifier under the cursor.
+
+#+begin_src emacs-lisp
+(use-package idle-highlight-mode
+  :ensure t
+  :hook prog-mode
+  :config
+  (setq idle-highlight-idle-time 0.02))
+#+end_src
 
 ** Line Numbers (~display-line-numbers~)
 Enables relative or absolute line numbers exclusively in programming buffers (~prog-mode~).
@@ -255,6 +266,13 @@ Enables relative or absolute line numbers exclusively in programming buffers (~p
 (use-package display-line-numbers
   :hook (prog-mode . display-line-numbers-mode))
 #+end_src 
+
+** Blinking
+Disable cursor blinking.
+
+#+begin_src emacs-lisp
+(blink-cursor-mode -1)
+#+end_src
 
 ** Cursor Flash (~beacon~)
 Flashes the cursor line whenever switching windows or scrolling long distances.
