@@ -124,6 +124,18 @@ Apply ~Hack Nerd Font~ globally as the primary monospace font family.
                     :font "Hack Nerd Font"
                     :height 120
                     :weight 'regular)
+
+;; Set a monospace font that contains math symbols (e.g., JuliaMono or DejaVu Sans Mono)
+;; https://github.com/cormullion/juliamono/releases
+(defvar my/fallback-font "JuliaMono")
+
+(set-fontset-font t 'greek             (font-spec :family my/fallback-font))
+(set-fontset-font t 'mathematical      (font-spec :family my/fallback-font))
+
+(dolist (range '((#x2100 . #x214f)     ; ℒ
+                 (#x2200 . #x22ff)     ; ∅ and math comparisons
+                 (#x1d400 . #x1d7ff))) ; 𝒹
+  (set-fontset-font t range (font-spec :family my/fallback-font)))
 #+end_src 
 
 ** Startup Screen & Initial Buffer
