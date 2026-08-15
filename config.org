@@ -19,6 +19,7 @@
   - [[#pretty-symbols][Pretty Symbols]]
   - [[#color-themes-ef-themes][Color Themes (~ef-themes~)]]
   - [[#modeline-doom-modeline][Modeline (~doom-modeline~)]]
+  - [[#rainbow-identifiers][Rainbow Identifiers]]
   - [[#highlight-symbol-at-cursor-idle-highlight][Highlight symbol at cursor (~idle-highlight~)]]
   - [[#line-numbers-display-line-numbers][Line Numbers (~display-line-numbers~)]]
   - [[#blinking][Blinking]]
@@ -248,7 +249,15 @@ A minimalist and modern status line powered by ~all-the-icons~.
   :custom
   (doom-modeline-bar-width 3)
   :init (doom-modeline-mode 1))
-#+end_src  
+#+end_src
+
+** Rainbow Identifiers
+
+#+begin_src emacs-lisp
+(use-package rainbow-identifiers
+  :ensure t
+  :hook prog-mode)
+#+end_src 
 
 ** Highlight symbol at cursor (~idle-highlight~)
 Highlight the all visible occurrances of the identifier under the cursor.
