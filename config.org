@@ -118,7 +118,7 @@ Remove conflicting built-in global and mode-specific keybindings.
                    "C-k" "C-l" "H-i" "C-j"
                    "s-j" "s-l" "s-i" "s-k" "s-["))
       (keymap-unset lisp-interaction-mode-map key t)))
-#+end_src
+#+end_src 
 
 ** Typography & Fonts
 Apply ~Hack Nerd Font~ globally as the primary monospace font family.
@@ -140,7 +140,7 @@ Apply ~Hack Nerd Font~ globally as the primary monospace font family.
                  (#x2200 . #x22ff)     ; ∅ and math comparisons
                  (#x1d400 . #x1d7ff))) ; 𝒹
   (set-fontset-font t range (font-spec :family my/fallback-font)))
-#+end_src 
+#+end_src  
 
 ** Startup Screen & Initial Buffer
 Start directly into a clean ~*scratch*~ buffer set up in ~org-mode~.
@@ -176,7 +176,7 @@ Prevents compilation warning buffers from popping up during package installation
 #+begin_src emacs-lisp
 ;;(setq native-comp-async-report-warnings-errors nil)
 ;;(setq warning-minimum-level :error)
-#+end_src   
+#+end_src    
 
 ** Keybinding Helper (~which-key~)
 Displays available keybindings in a popup panel when starting a key sequence.
@@ -220,7 +220,7 @@ Configures clean, mathematical pretty symbol replacements for Scheme and Racket 
 ;; Enable pretty symbols in Racket and Scheme modes
 (add-hook 'racket-mode-hook #'scheme-pretty-symbols)
 (add-hook 'scheme-mode-hook #'scheme-pretty-symbols)
-#+end_src  
+#+end_src   
 
 ** Color Themes (~ef-themes~)
 Colorful, high-contrast, and legible themes crafted by Protesilaos Stavrou.
@@ -238,7 +238,7 @@ Sets ~ef-bio~ as the default theme with a quick keybinding to rotate through ran
    ("C-S-p" . (lambda ()
 				(interactive)
                 (load-theme 'ef-bio :no-confirm)))))
-#+end_src  
+#+end_src   
 
 ** Modeline (~doom-modeline~)
 A minimalist and modern status line powered by ~all-the-icons~.
@@ -269,7 +269,7 @@ Highlight the all visible occurrances of the identifier under the cursor.
   :hook prog-mode
   :config
   (setq idle-highlight-idle-time 0.02))
-#+end_src
+#+end_src 
 
 ** Line Numbers (~display-line-numbers~)
 Enables relative or absolute line numbers exclusively in programming buffers (~prog-mode~).
@@ -284,7 +284,7 @@ Disable cursor blinking.
 
 #+begin_src emacs-lisp
 (blink-cursor-mode -1)
-#+end_src
+#+end_src 
 
 ** Cursor Flash (~beacon~)
 Flashes the cursor line whenever switching windows or scrolling long distances.
@@ -322,7 +322,7 @@ Uses the Omarchy neon green palette for visual harmony.
         scroll-margin 0)        ; important: scroll-margin>0 not yet supported
   :config
   (ultra-scroll-mode 1))
-#+end_src
+#+end_src 
 
 * File & Buffer Management
 Streamlined tools for directory navigation, file manipulation, and active buffer management 
@@ -351,7 +351,7 @@ hide unnecessary details, colorize file attributes, and show modern file icons.
 (use-package diredfl
   :ensure t
   :hook (dired-mode . diredfl-mode))
-#+end_src  
+#+end_src   
 
 ** Advanced Search & Orderless Matching (~orderless~ & ~consult~)
 Replaces standard search with fuzzy multi-word completion and high-speed project search.
@@ -376,7 +376,7 @@ Replaces standard search with fuzzy multi-word completion and high-speed project
    ("C-s"     . consult-line)             ; Search text inside current buffer with preview
    :map minibuffer-local-map
    ("M-s"     . consult-history)))
-#+end_src 
+#+end_src  
 
 
 * Editing & Completion Tools
@@ -439,7 +439,7 @@ Automatic insertion, structural editing, and strict pairing for code and notes.
   (setq sp-highlight-pair-overlay nil)
   (setq sp-highlight-wrap-overlay nil)
   (setq sp-highlight-wrap-tag-overlay nil))
-#+end_src
+#+end_src 
 
 ** Rainbow Delimiters (~rainbow-delimiters~)
 Colorizes matching parentheses, brackets, and braces according to their depth.
@@ -448,7 +448,7 @@ Colorizes matching parentheses, brackets, and braces according to their depth.
 (use-package rainbow-delimiters
   :ensure t
   :hook ((prog-mode geiser-repl-mode) . rainbow-delimiters-mode))
-#+end_src
+#+end_src 
 
 ** Floating Command Palette (~vertico~ & ~vertico-posframe~)
 Provides a centered, floating completion UI for ~M-x~, file navigation, and buffer switching, 
@@ -487,7 +487,7 @@ complemented by ~marginalia~ for rich parameter descriptions.
   (vertico-posframe-parameters
    '((left-fringe . 8)
      (right-fringe . 8))))
-#+end_src 
+#+end_src  
 
 ** Multiple cursor
 #+begin_src emacs-lisp
