@@ -54,6 +54,11 @@
 Core system optimizations, garbage collection tweaks, and runtime file hygiene settings 
 designed to keep Emacs fast, responsive, and uncluttered.
 
+# Ensures the tangled config.el gets a lexical-binding cookie as its first line.
+#+begin_src emacs-lisp
+;;; config.el -*- lexical-binding: t; -*-
+#+end_src
+
 ** Directory Cleanup (~no-littering~)
 The ~no-littering~ package automatically redirects temporary and state files 
 created by Emacs and its packages to the ~var/~ and ~etc/~ subdirectories inside =~/.emacs.d/=.
